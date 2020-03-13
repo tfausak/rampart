@@ -1,0 +1,55 @@
+name: rampart
+version: 1.0.0.0
+synopsis: 🏰 Determine how intervals relate to each other.
+description: Rampart determines how intervals relate to each other.
+
+build-type: Simple
+cabal-version: >= 1.10
+category: Math
+extra-source-files: README.markdown
+license-file: LICENSE.markdown
+license: ISC
+maintainer: Taylor Fausak
+
+source-repository head
+  location: https://github.com/tfausak/rampart
+  type: git
+
+library
+  build-depends:
+    base >= 4.13.0 && < 4.14
+  default-language: Haskell98
+  exposed-modules: Rampart
+  ghc-options:
+    -Weverything
+    -Wno-implicit-prelude
+    -Wno-safe
+  hs-source-dirs: src/lib
+
+test-suite test
+  build-depends:
+    base -any
+    , rampart -any
+    , hspec >= 2.7.1 && < 2.8
+  default-language: Haskell98
+  ghc-options:
+    -Weverything
+    -Wno-implicit-prelude
+    -Wno-unsafe
+  hs-source-dirs: src/test
+  main-is: Main.hs
+  type: exitcode-stdio-1.0
+
+benchmark bench
+  build-depends:
+    base -any
+    , rampart -any
+    , criterion >= 1.5.6 && < 1.6
+  default-language: Haskell98
+  ghc-options:
+    -Weverything
+    -Wno-implicit-prelude
+    -Wno-safe
+  hs-source-dirs: src/bench
+  main-is: Main.hs
+  type: exitcode-stdio-1.0
