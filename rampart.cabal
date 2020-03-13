@@ -1,5 +1,5 @@
 name: rampart
-version: 1.0.0.0
+version: 1.0.0.1
 synopsis: 🏰 Determine how intervals relate to each other.
 description: Rampart determines how intervals relate to each other.
 
@@ -17,7 +17,7 @@ source-repository head
 
 library
   build-depends:
-    base >= 4.13.0 && < 4.14
+    base >= 4.11.0 && < 4.14
   default-language: Haskell98
   exposed-modules: Rampart
   ghc-options:
