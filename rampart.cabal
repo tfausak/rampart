@@ -4,8 +4,9 @@ synopsis: 🏰 Determine how intervals relate to each other.
 description: Rampart determines how intervals relate to each other.
 
 build-type: Simple
-cabal-version: >= 1.10
+cabal-version: >= 1.18
 category: Math
+extra-doc-files: interval-relations.svg
 extra-source-files: README.markdown
 license-file: LICENSE.markdown
 license: ISC

@@ -86,6 +86,12 @@ greater = snd . fromInterval
 -- these relations are mutually exclusive and exhaustive.
 --
 -- Use 'relate' to determine the relation between two 'Interval's.
+--
+-- The following image shows all 13 possible 'Interval' relations. If for
+-- whatever reason you can't see the image, each constructor for this type has
+-- ASCII art showing the 'Interval' relation.
+--
+-- ![All 13 interval relation.](interval-relations.svg)
 data Relation
   = Before
   -- ^ 'Interval' @x@ is before 'Interval' @y@.
