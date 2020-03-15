@@ -4,7 +4,7 @@ language: haskell
 ghc: 8.8
 deploy:
   on:
-    branch: rampart
+    tags: true
   provider: hackage
   username: fozworth
   password:
