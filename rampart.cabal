@@ -1,11 +1,13 @@
+cabal-version: 1.18
+
 name: rampart
 version: 1.0.0.1
 synopsis: 🏰 Determine how intervals relate to each other.
 description: Rampart determines how intervals relate to each other.
 
 build-type: Simple
-cabal-version: >= 1.10
 category: Math
+extra-doc-files: interval-relations.svg
 extra-source-files: README.markdown
 license-file: LICENSE.markdown
 license: ISC
@@ -25,6 +27,9 @@ library
     -Wno-implicit-prelude
     -Wno-safe
   hs-source-dirs: src/lib
+
+  if impl(ghc >= 8.8.1)
+    ghc-options: -Wno-missing-deriving-strategies
 
 test-suite test
   build-depends:

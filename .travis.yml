@@ -1,0 +1,11 @@
+os: linux
+dist: xenial
+language: haskell
+ghc: 8.8
+deploy:
+  on:
+    tags: true
+  provider: hackage
+  username: fozworth
+  password:
+    secure: rD5uF4F7w+5O9oCQQ6F++cY7WlEHnlT8B/7jgjJczZvPnLdjoCl3xWgAwkdOJCbkkhuW/0Gdbb5EO9TCy26zxj2IiqDX0HTnnxMwpBH1cIcZf3+U8VkMFauWiXtjsyUeD7ZfIQoUXuC2MjOrVnGaLvIP3GjP6uyzRUDzM/0cyVNq7f+r2aRcIQAzmIeEfLEJtoQ2n53LS6G8hEsABwrSrt7XcimsHQ/3yw82HEkkcM3S+qsnflrzvUA0NaJYawCsGfJy6DoeHwNlf+1iKt4Yjmje78pUWrFSU5F18XBUajbGEEmqBtNMJQCl3m6yEb994RuX0QG4bWbf5o/gc2kXvrgaf3HJrTaHVHl2Ga9KaWgywKAm6BECXQb69LlKGwQjF0U7INQcmOmNilb1frLuPAy6ScSBE6kHjYg7WGQVSg3CDFq5Hf2IUY4EBTDuYBBeCpleSU83sa8Dt7ifprigLHEitbyh3N/JHVwpWRprGWDMPYFessH0LW704LQMbOR397pgCE6gCX4WqAF4EgzKQ/iMyQTatd8d3hReSXzSzEgobSQNFlthFxUmoQzuPzbvHu84CbkkVtJT609z44p0qaiaRgsO/lGDg+90KbuF7syRQNcdanvt4tNsZdAQ+QbSeMuTexwuErt39BVMrIojUw+OUTOAlAUFUzSjnseNXso=
