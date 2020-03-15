@@ -31,10 +31,7 @@ module Rampart
 --
 -- Use 'toInterval' to construct an interval and 'fromInterval' to deconstruct
 -- one. Use 'relate' to determine how two intervals relate to each other.
-newtype Interval a = Interval (a, a)
-
-instance Eq a => Eq (Interval a) where
-  x == y = fromInterval x == fromInterval y
+newtype Interval a = Interval (a, a) deriving (Eq)
 
 instance Show a => Show (Interval a) where
   show x = "toInterval " <> show (fromInterval x)
@@ -273,39 +270,7 @@ data Relation
   -- > +---+
   -- > | y |
   -- > +---+
-
-instance Eq Relation where
-  x == y = case (x, y) of
-    (After, After) -> True
-    (Before, Before) -> True
-    (Contains, Contains) -> True
-    (During, During) -> True
-    (Equal, Equal) -> True
-    (FinishedBy, FinishedBy) -> True
-    (Finishes, Finishes) -> True
-    (Meets, Meets) -> True
-    (MetBy, MetBy) -> True
-    (OverlappedBy, OverlappedBy) -> True
-    (Overlaps, Overlaps) -> True
-    (StartedBy, StartedBy) -> True
-    (Starts, Starts) -> True
-    _ -> False
-
-instance Show Relation where
-  show x = case x of
-    After -> "After"
-    Before -> "Before"
-    Contains -> "Contains"
-    During -> "During"
-    Equal -> "Equal"
-    FinishedBy -> "FinishedBy"
-    Finishes -> "Finishes"
-    Meets -> "Meets"
-    MetBy -> "MetBy"
-    OverlappedBy -> "OverlappedBy"
-    Overlaps -> "Overlaps"
-    StartedBy -> "StartedBy"
-    Starts -> "Starts"
+  deriving (Eq, Show)
 
 -- | Relates two 'Interval's. Calling @relate x y@ tells you how 'Interval' @x@
 -- relates to 'Interval' @y@. Consult the 'Relation' documentation for an

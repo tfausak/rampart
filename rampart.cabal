@@ -27,6 +27,9 @@ library
     -Wno-safe
   hs-source-dirs: src/lib
 
+  if impl(ghc >= 8.8.1)
+    ghc-options: -Wno-missing-deriving-strategies
+
 test-suite test
   build-depends:
     base -any
