@@ -299,6 +299,7 @@ relate x y =
     gxly = compare (greater x) (lesser y)
     gxgy = compare (greater x) (greater y)
   in case (lxly, lxgy, gxly, gxgy) of
+    (EQ, _, _, EQ) -> Equal
     (_, _, LT, _) -> Before
     (_, _, EQ, _) -> Meets
     (_, EQ, _, _) -> MetBy
@@ -307,7 +308,6 @@ relate x y =
     (LT, _, _, EQ) -> FinishedBy
     (LT, _, _, GT) -> Contains
     (EQ, _, _, LT) -> Starts
-    (EQ, _, _, EQ) -> Equal
     (EQ, _, _, GT) -> StartedBy
     (GT, _, _, LT) -> During
     (GT, _, _, EQ) -> Finishes

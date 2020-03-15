@@ -68,6 +68,55 @@ main = Hspec.hspec . Hspec.describe "Rampart" $ do
     Hspec.it "identifies the after relation" $ do
       relate (8, 9) (3, 7) `Hspec.shouldBe` Rampart.After
 
+    Hspec.describe "empty left interval" $ do
+
+      Hspec.it "before" $ do
+        relate (2, 2) (3, 7) `Hspec.shouldBe` Rampart.Before
+
+      Hspec.it "at lesser" $ do
+        relate (3, 3) (3, 7) `Hspec.shouldBe` Rampart.Meets
+        Hspec.pendingWith "https://github.com/tfausak/rampart/issues/2"
+
+      Hspec.it "during" $ do
+        relate (5, 5) (3, 7) `Hspec.shouldBe` Rampart.During
+
+      Hspec.it "at greater" $ do
+        relate (7, 7) (3, 7) `Hspec.shouldBe` Rampart.MetBy
+        Hspec.pendingWith "https://github.com/tfausak/rampart/issues/2"
+
+      Hspec.it "after" $ do
+        relate (8, 8) (3, 7) `Hspec.shouldBe` Rampart.After
+
+    Hspec.describe "empty right interval" $ do
+
+      Hspec.it "before" $ do
+        relate (3, 7) (2, 2) `Hspec.shouldBe` Rampart.After
+
+      Hspec.it "at lesser" $ do
+        relate (3, 7) (3, 3) `Hspec.shouldBe` Rampart.MetBy
+        Hspec.pendingWith "https://github.com/tfausak/rampart/issues/2"
+
+      Hspec.it "during" $ do
+        relate (3, 7) (5, 5) `Hspec.shouldBe` Rampart.Contains
+
+      Hspec.it "at greater" $ do
+        relate (3, 7) (7, 7) `Hspec.shouldBe` Rampart.Meets
+        Hspec.pendingWith "https://github.com/tfausak/rampart/issues/2"
+
+      Hspec.it "after" $ do
+        relate (3, 7) (8, 8) `Hspec.shouldBe` Rampart.Before
+
+    Hspec.describe "both empty intervals" $ do
+
+      Hspec.it "before" $ do
+        relate (4, 4) (5, 5) `Hspec.shouldBe` Rampart.Before
+
+      Hspec.it "equal" $ do
+        relate (5, 5) (5, 5) `Hspec.shouldBe` Rampart.Equal
+
+      Hspec.it "after" $ do
+        relate (6, 6) (5, 5) `Hspec.shouldBe` Rampart.After
+
   Hspec.describe "invert" $ do
 
     Hspec.it "inverts the after relation" $ do
