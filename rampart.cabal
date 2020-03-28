@@ -19,7 +19,7 @@ source-repository head
 
 library
   build-depends:
-    base >= 4.11.0 && < 4.14
+    base >= 4.11.0 && < 4.15
   default-language: Haskell98
   exposed-modules: Rampart
   ghc-options:
