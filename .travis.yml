@@ -1,12 +1,48 @@
 os: linux
-dist: xenial
-language: haskell
-ghc: 8.8
+dist: bionic
+language: generic
+addons:
+  apt:
+    packages:
+      - libgmp-dev
+env:
+  global:
+    - HACKAGE_USERNAME=fozworth
+    # HACKAGE_PASSWORD
+    - secure: "qRLZapirBqAfUTjcNhEYZOiC01n2NSOg15tCvKmDCimX7cv9rTSKQj+edoFfUY1FcVX7X5TQMw+bt8l0cbroOEWLZ/+J6Vsb9t45+GcNKE2T+1sC6mFNucIMfMnFEZuEgZIIxGIhsY5koWOQ0cY/FQbkpQY+hY1KlX7TjUWqaoBElnsQ6zEoMyaW/Eykkp1sOQE58OiTR9YclH9fC2vpO1lNyrIGYnCqWrgGCoUIjXyqb+qoXi3/metRPt2FfKPMZmQtPwqAwCU36uMglSZOQTMqb+6yB49STxLgwy6Xf64+9Xn5nHtBiLSfXfl35K10MgkNJ81elYCvT6DL/ZFqXAVG4bidG7sLhAqloNfIw7ZjgQZJWUs+ZKqGwL0tBtYu6h6pBIRj6aZVIilRjRH0pwzEMeoCKghgyvmQoT/zEjtTCMDxV5EHW26S5dfGvO7c0VBJviUc1teGpxg7fSouGAL2i+2oz+eueZwbFtA6BiFJC6WNK4ZsqoFukfbS1lJacwZM6uFG49hIJU/1CxlrkP5JDaF+NxNroSLby8EqJiD0jjDtE5SGlJC9BHT44tnS9s69cKbSv4dUifGCPqUnHxHtMCg/P2b1h8yEtOWs08d5RTp47KPRKh7/9VkP6djQFgtPuUlOYYcjtnu0VUIdYWQRiEKs5xVsJC5qI0IE0R8="
+
+cache:
+  directories:
+    - $HOME/.local/bin
+    - $HOME/.stack
+
+before_install:
+  - |
+    if ! test -f "$HOME/.local/bin/stack"
+    then
+      VERSION=2.3.0.1
+      URL="https://github.com/commercialhaskell/stack/releases/download/v$VERSION/stack-$VERSION-linux-x86_64-static.tar.gz"
+      curl --location --output stack.tar.gz "$URL"
+      gunzip stack.tar.gz
+      tar --extract --file stack.tar --strip-components 1
+      mkdir --parents "$HOME/.local/bin"
+      mv stack "$HOME/.local/bin"
+      rm stack.tar
+    fi
+  - stack --version
+
+install:
+  - stack setup
+  - stack build --only-dependencies --test
+
+script:
+  - stack build --no-run-tests --pedantic --test
+  - stack build --test
+  - stack sdist
+
 deploy:
+  provider: script
   on:
     tags: true
-  provider: hackage
-  username: fozworth
-  password:
-    secure: rD5uF4F7w+5O9oCQQ6F++cY7WlEHnlT8B/7jgjJczZvPnLdjoCl3xWgAwkdOJCbkkhuW/0Gdbb5EO9TCy26zxj2IiqDX0HTnnxMwpBH1cIcZf3+U8VkMFauWiXtjsyUeD7ZfIQoUXuC2MjOrVnGaLvIP3GjP6uyzRUDzM/0cyVNq7f+r2aRcIQAzmIeEfLEJtoQ2n53LS6G8hEsABwrSrt7XcimsHQ/3yw82HEkkcM3S+qsnflrzvUA0NaJYawCsGfJy6DoeHwNlf+1iKt4Yjmje78pUWrFSU5F18XBUajbGEEmqBtNMJQCl3m6yEb994RuX0QG4bWbf5o/gc2kXvrgaf3HJrTaHVHl2Ga9KaWgywKAm6BECXQb69LlKGwQjF0U7INQcmOmNilb1frLuPAy6ScSBE6kHjYg7WGQVSg3CDFq5Hf2IUY4EBTDuYBBeCpleSU83sa8Dt7ifprigLHEitbyh3N/JHVwpWRprGWDMPYFessH0LW704LQMbOR397pgCE6gCX4WqAF4EgzKQ/iMyQTatd8d3hReSXzSzEgobSQNFlthFxUmoQzuPzbvHu84CbkkVtJT609z44p0qaiaRgsO/lGDg+90KbuF7syRQNcdanvt4tNsZdAQ+QbSeMuTexwuErt39BVMrIojUw+OUTOAlAUFUzSjnseNXso=
-  publish: true
+  skip_cleanup: true
+  script: yes | stack upload .
