@@ -1,6 +1,6 @@
 # Rampart
 
-[![Travis CI](https://travis-ci.org/tfausak/rampart.svg?branch=rampart)](https://travis-ci.org/tfausak/rampart)
+[![Travis CI](https://travis-ci.org/tfausak/rampart.svg?branch=master)](https://travis-ci.org/tfausak/rampart)
 [![Hackage](https://img.shields.io/hackage/v/rampart)](https://hackage.haskell.org/package/rampart)
 [![Stackage](https://www.stackage.org/package/rampart/badge/nightly?label=stackage)](https://www.stackage.org/package/rampart)
 
