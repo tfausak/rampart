@@ -74,15 +74,13 @@ main = Hspec.hspec . Hspec.describe "Rampart" $ do
         relate (2, 2) (3, 7) `Hspec.shouldBe` Rampart.Before
 
       Hspec.it "at lesser" $ do
-        relate (3, 3) (3, 7) `Hspec.shouldBe` Rampart.Meets
-        Hspec.pendingWith "https://github.com/tfausak/rampart/issues/2"
+        relate (3, 3) (3, 7) `Hspec.shouldBe` Rampart.Overlaps
 
       Hspec.it "during" $ do
         relate (5, 5) (3, 7) `Hspec.shouldBe` Rampart.During
 
       Hspec.it "at greater" $ do
-        relate (7, 7) (3, 7) `Hspec.shouldBe` Rampart.MetBy
-        Hspec.pendingWith "https://github.com/tfausak/rampart/issues/2"
+        relate (7, 7) (3, 7) `Hspec.shouldBe` Rampart.OverlappedBy
 
       Hspec.it "after" $ do
         relate (8, 8) (3, 7) `Hspec.shouldBe` Rampart.After
@@ -93,15 +91,13 @@ main = Hspec.hspec . Hspec.describe "Rampart" $ do
         relate (3, 7) (2, 2) `Hspec.shouldBe` Rampart.After
 
       Hspec.it "at lesser" $ do
-        relate (3, 7) (3, 3) `Hspec.shouldBe` Rampart.MetBy
-        Hspec.pendingWith "https://github.com/tfausak/rampart/issues/2"
+        relate (3, 7) (3, 3) `Hspec.shouldBe` Rampart.OverlappedBy
 
       Hspec.it "during" $ do
         relate (3, 7) (5, 5) `Hspec.shouldBe` Rampart.Contains
 
       Hspec.it "at greater" $ do
-        relate (3, 7) (7, 7) `Hspec.shouldBe` Rampart.Meets
-        Hspec.pendingWith "https://github.com/tfausak/rampart/issues/2"
+        relate (3, 7) (7, 7) `Hspec.shouldBe` Rampart.Overlaps
 
       Hspec.it "after" $ do
         relate (3, 7) (8, 8) `Hspec.shouldBe` Rampart.Before

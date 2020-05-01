@@ -291,6 +291,16 @@ data Relation
 -- relate ('toInterval' (7, 8)) ('toInterval' (3, 7)) '==' 'MetBy'
 -- relate ('toInterval' (8, 9)) ('toInterval' (3, 7)) '==' 'After'
 -- @
+--
+-- Note that relating an empty interval with a non-empty interval may be
+-- surprising when the intervals share an endpoint.
+--
+-- @
+-- >>> relate ('toInterval' (3, 3)) ('toInterval' (3, 7)) '==' 'Overlaps'
+-- >>> relate ('toInterval' (7, 7)) ('toInterval' (3, 7)) '==' 'OverlappedBy'
+-- >>> relate ('toInterval' (3, 7)) ('toInterval' (3, 3)) '==' 'OverlappedBy'
+-- >>> relate ('toInterval' (3, 7)) ('toInterval' (7, 7)) '==' 'Overlaps'
+-- @
 relate :: Ord a => Interval a -> Interval a -> Relation
 relate x y =
   let
@@ -301,8 +311,10 @@ relate x y =
   in case (lxly, lxgy, gxly, gxgy) of
     (EQ, _, _, EQ) -> Equal
     (_, _, LT, _) -> Before
-    (_, _, EQ, _) -> Meets
-    (_, EQ, _, _) -> MetBy
+    (LT, _, EQ, LT) -> Meets
+    (_, _, EQ, _) -> Overlaps
+    (GT, EQ, _, GT) -> MetBy
+    (_, EQ, _, _) -> OverlappedBy
     (_, GT, _, _) -> After
     (LT, _, _, LT) -> Overlaps
     (LT, _, _, EQ) -> FinishedBy
