@@ -133,6 +133,7 @@ data Relation
   -- ^ 'Interval' @x@ meets 'Interval' @y@.
   --
   -- @
+  -- 'isNonEmpty' x '&&'
   -- 'greater' x '==' 'lesser' y
   -- @
   --
@@ -161,6 +162,7 @@ data Relation
   -- ^ 'Interval' @x@ is finished by 'Interval' @y@.
   --
   -- @
+  -- 'isNonEmpty' y '&&'
   -- 'lesser' x '<' 'lesser' y '&&'
   -- 'greater' x '==' 'greater' y
   -- @
@@ -189,6 +191,7 @@ data Relation
   -- ^ 'Interval' @x@ starts 'Interval' @y@.
   --
   -- @
+  -- 'isNonEmpty' x '&&'
   -- 'lesser' x '==' 'lesser' y '&&'
   -- 'greater' x '<' 'greater' y
   -- @
@@ -217,6 +220,7 @@ data Relation
   -- ^ 'Interval' @x@ is started by 'Interval' @y@.
   --
   -- @
+  -- 'isNonEmpty' y '&&'
   -- 'lesser' x '==' 'lesser' y '&&'
   -- 'greater' x '>' 'greater' y
   -- @
@@ -245,6 +249,7 @@ data Relation
   -- ^ 'Interval' @x@ finishes 'Interval' @y@.
   --
   -- @
+  -- 'isNonEmpty' x '&&'
   -- 'lesser' x '>' 'lesser' y '&&'
   -- 'greater' x '==' 'greater' y
   -- @
@@ -274,6 +279,7 @@ data Relation
   -- ^ 'Interval' @x@ is met by 'Interval' @y@.
   --
   -- @
+  -- 'isNonEmpty' y '&&'
   -- 'lesser' x '==' 'greater' y
   -- @
   --
