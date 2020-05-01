@@ -20,6 +20,8 @@ module Rampart
   , fromInterval
   , lesser
   , greater
+  , isEmpty
+  , isNonEmpty
   , Relation(..)
   , relate
   , invert
@@ -77,6 +79,30 @@ lesser = fst . fromInterval
 -- prop> greater (toInterval (x, y)) == max x y
 greater :: Interval a -> a
 greater = snd . fromInterval
+
+-- | Returns 'True' if the given 'Interval' is empty, 'False' otherwise. An
+-- 'Interval' is empty if its 'lesser' equals its 'greater'.
+--
+-- @
+-- isEmpty ('toInterval' (1, 1)) '==' 'True'
+-- isEmpty ('toInterval' (1, 2)) '==' 'False'
+-- @
+--
+-- See 'isNonEmpty' for the opposite check.
+isEmpty :: Eq a => Interval a -> Bool
+isEmpty = uncurry (==) . fromInterval
+
+-- | Returns 'True' if the given 'Interval' is non-empty, 'False' otherwise. An
+-- 'Interval' is non-empty if its 'lesser' is not equal to its 'greater'.
+--
+-- @
+-- isNonEmpty ('toInterval' (1, 2)) '==' 'True'
+-- isNonEmpty ('toInterval' (1, 1)) '==' 'False'
+-- @
+--
+-- See 'isEmpty' for the opposite check.
+isNonEmpty :: Eq a => Interval a -> Bool
+isNonEmpty = not . isEmpty
 
 -- | This type describes how two 'Interval's relate to each other. Each
 -- constructor represents one of the 13 possible relations. Taken together

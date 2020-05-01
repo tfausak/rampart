@@ -23,6 +23,22 @@ main = Hspec.hspec . Hspec.describe "Rampart" $ do
     Hspec.it "returns the greater element" $ do
       Rampart.greater (Rampart.toInterval ('a', 'b')) `Hspec.shouldBe` 'b'
 
+  Hspec.describe "isEmpty" $ do
+
+    Hspec.it "returns true when the interval is empty" $ do
+      Rampart.isEmpty (Rampart.toInterval ('a', 'a')) `Hspec.shouldBe` True
+
+    Hspec.it "returns false when the interval is not empty" $ do
+      Rampart.isEmpty (Rampart.toInterval ('a', 'b')) `Hspec.shouldBe` False
+
+  Hspec.describe "isNonEmpty" $ do
+
+    Hspec.it "returns false when the interval is empty" $ do
+      Rampart.isNonEmpty (Rampart.toInterval ('a', 'a')) `Hspec.shouldBe` False
+
+    Hspec.it "returns true when the interval is non-empty" $ do
+      Rampart.isNonEmpty (Rampart.toInterval ('a', 'b')) `Hspec.shouldBe` True
+
   Hspec.describe "relate" $ do
 
     let
