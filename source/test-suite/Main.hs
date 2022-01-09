@@ -11,7 +11,8 @@ main = Hspec.hspec . Hspec.describe "Rampart" $ do
   Hspec.describe "toInterval" $ do
 
     Hspec.it "sorts the tuple" $ do
-      Rampart.toInterval ('a', 'b') `Hspec.shouldBe` Rampart.toInterval ('b', 'a')
+      Rampart.toInterval ('a', 'b')
+        `Hspec.shouldBe` Rampart.toInterval ('b', 'a')
 
   Hspec.describe "lesser" $ do
 
@@ -43,7 +44,8 @@ main = Hspec.hspec . Hspec.describe "Rampart" $ do
 
     let
       relate :: (Int, Int) -> (Int, Int) -> Rampart.Relation
-      relate x y = Rampart.relate (Rampart.toInterval x) (Rampart.toInterval y)
+      relate x y =
+        Rampart.relate (Rampart.toInterval x) (Rampart.toInterval y)
 
     Hspec.it "identifies the before relation" $ do
       relate (1, 2) (3, 7) `Hspec.shouldBe` Rampart.Before
