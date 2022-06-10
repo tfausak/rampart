@@ -1,7 +1,7 @@
 cabal-version: 2.2
 
 name: rampart
-version: 2.0.0.0
+version: 2.0.0.1
 synopsis: Determine how intervals relate to each other.
 description: Rampart determines how intervals relate to each other.
 
