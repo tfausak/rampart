@@ -74,7 +74,7 @@ benchmark bench
   import: executable
 
   build-depends:
-    , criterion >= 1.5.7 && < 1.6
+    , criterion >= 1.5.7 && < 1.7
   hs-source-dirs: source/benchmark
   main-is: Main.hs
   type: exitcode-stdio-1.0
