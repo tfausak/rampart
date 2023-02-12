@@ -24,27 +24,25 @@ flag pedantic
 
 common library
   build-depends:
-    , base >= 4.13.0 && < 4.18
+    , base >= 4.15.0 && < 4.18
   default-language: Haskell2010
   ghc-options:
-    -Wall-missed-specialisations
     -Weverything
+    -Wno-all-missed-specialisations
     -Wno-implicit-prelude
     -Wno-missing-deriving-strategies
     -Wno-missing-exported-signatures
+    -Wno-missing-safe-haskell-mode
+    -Wno-prepositive-qualified-module
     -Wno-safe
-
-  if flag(pedantic)
-    ghc-options: -Werror
-
-  if impl(ghc >= 8.10)
-    ghc-options:
-      -Wno-missing-safe-haskell-mode
-      -Wno-prepositive-qualified-module
+    -Wno-unsafe
 
   if impl(ghc >= 9.2)
     ghc-options:
       -Wno-missing-kind-signatures
+
+  if flag(pedantic)
+    ghc-options: -Werror
 
 common executable
   import: library
@@ -61,20 +59,11 @@ library
   exposed-modules: Rampart
   hs-source-dirs: source/library
 
-test-suite test
+test-suite rampart-test-suite
   import: executable
 
   build-depends:
     , hspec >= 2.7.6 && < 2.11
   hs-source-dirs: source/test-suite
-  main-is: Main.hs
-  type: exitcode-stdio-1.0
-
-benchmark bench
-  import: executable
-
-  build-depends:
-    , criterion >= 1.5.7 && < 1.7
-  hs-source-dirs: source/benchmark
   main-is: Main.hs
   type: exitcode-stdio-1.0
