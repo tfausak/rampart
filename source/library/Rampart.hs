@@ -15,17 +15,18 @@
 -- understand this module, but if you want to read it you can find it here:
 -- <https://hdl.handle.net/1802/10574>.
 module Rampart
-  ( Interval
-  , toInterval
-  , fromInterval
-  , lesser
-  , greater
-  , isEmpty
-  , isNonEmpty
-  , Relation(..)
-  , relate
-  , invert
-  ) where
+  ( Interval,
+    toInterval,
+    fromInterval,
+    lesser,
+    greater,
+    isEmpty,
+    isNonEmpty,
+    Relation (..),
+    relate,
+    invert,
+  )
+where
 
 -- | This type represents an interval bounded by two values, the 'lesser' and
 -- the 'greater'. These values can be anything with an 'Ord' instance: numbers,
@@ -35,14 +36,14 @@ module Rampart
 -- one. Use 'relate' to determine how two intervals relate to each other.
 newtype Interval a = Interval (a, a) deriving (Eq)
 
-instance Show a => Show (Interval a) where
+instance (Show a) => Show (Interval a) where
   show x = "toInterval " <> show (fromInterval x)
 
 -- | Converts a tuple into an 'Interval'. Note that this requires an 'Ord'
 -- constraint so that the 'Interval' can be sorted on construction.
 --
 -- Use 'fromInterval' to go in the other direction.
-toInterval :: Ord a => (a, a) -> Interval a
+toInterval :: (Ord a) => (a, a) -> Interval a
 toInterval (x, y) = if x > y then Interval (y, x) else Interval (x, y)
 
 -- | Converts an 'Interval' into a tuple. Generally you can think of this as
@@ -89,7 +90,7 @@ greater = snd . fromInterval
 -- @
 --
 -- See 'isNonEmpty' for the opposite check.
-isEmpty :: Eq a => Interval a -> Bool
+isEmpty :: (Eq a) => Interval a -> Bool
 isEmpty = uncurry (==) . fromInterval
 
 -- | Returns 'True' if the given 'Interval' is non-empty, 'False' otherwise. An
@@ -101,7 +102,7 @@ isEmpty = uncurry (==) . fromInterval
 -- @
 --
 -- See 'isEmpty' for the opposite check.
-isNonEmpty :: Eq a => Interval a -> Bool
+isNonEmpty :: (Eq a) => Interval a -> Bool
 isNonEmpty = not . isEmpty
 
 -- | This type describes how two 'Interval's relate to each other. Each
@@ -116,192 +117,192 @@ isNonEmpty = not . isEmpty
 --
 -- ![All 13 interval relation.](docs/interval-relations.svg)
 data Relation
-  = Before
-  -- ^ 'Interval' @x@ is before 'Interval' @y@.
-  --
-  -- @
-  -- 'greater' x '<' 'lesser' y
-  -- @
-  --
-  -- > +---+
-  -- > | x |
-  -- > +---+
-  -- >       +---+
-  -- >       | y |
-  -- >       +---+
-  | Meets
-  -- ^ 'Interval' @x@ meets 'Interval' @y@.
-  --
-  -- @
-  -- 'isNonEmpty' x '&&'
-  -- 'greater' x '==' 'lesser' y
-  -- @
-  --
-  -- > +---+
-  -- > | x |
-  -- > +---+
-  -- >     +---+
-  -- >     | y |
-  -- >     +---+
-  | Overlaps
-  -- ^ 'Interval' @x@ overlaps 'Interval' @y@.
-  --
-  -- @
-  -- 'lesser' x '<' 'lesser' y '&&'
-  -- 'greater' x '>' 'lesser' y '&&'
-  -- 'greater' x '<' 'greater' y
-  -- @
-  --
-  -- > +---+
-  -- > | x |
-  -- > +---+
-  -- >   +---+
-  -- >   | y |
-  -- >   +---+
-  | FinishedBy
-  -- ^ 'Interval' @x@ is finished by 'Interval' @y@.
-  --
-  -- @
-  -- 'isNonEmpty' y '&&'
-  -- 'lesser' x '<' 'lesser' y '&&'
-  -- 'greater' x '==' 'greater' y
-  -- @
-  --
-  -- > +-----+
-  -- > |  x  |
-  -- > +-----+
-  -- >   +---+
-  -- >   | y |
-  -- >   +---+
-  | Contains
-  -- ^ 'Interval' @x@ contains 'Interval' @y@.
-  --
-  -- @
-  -- 'lesser' x '<' 'lesser' y '&&'
-  -- 'greater' x '>' 'greater' y
-  -- @
-  --
-  -- > +-------+
-  -- > |   x   |
-  -- > +-------+
-  -- >   +---+
-  -- >   | y |
-  -- >   +---+
-  | Starts
-  -- ^ 'Interval' @x@ starts 'Interval' @y@.
-  --
-  -- @
-  -- 'isNonEmpty' x '&&'
-  -- 'lesser' x '==' 'lesser' y '&&'
-  -- 'greater' x '<' 'greater' y
-  -- @
-  --
-  -- > +---+
-  -- > | x |
-  -- > +---+
-  -- > +-----+
-  -- > |  y  |
-  -- > +-----+
-  | Equal
-  -- ^ 'Interval' @x@ is equal to 'Interval' @y@.
-  --
-  -- @
-  -- 'lesser' x '==' 'lesser' y '&&'
-  -- 'greater' x '==' 'greater' y
-  -- @
-  --
-  -- > +---+
-  -- > | x |
-  -- > +---+
-  -- > +---+
-  -- > | y |
-  -- > +---+
-  | StartedBy
-  -- ^ 'Interval' @x@ is started by 'Interval' @y@.
-  --
-  -- @
-  -- 'isNonEmpty' y '&&'
-  -- 'lesser' x '==' 'lesser' y '&&'
-  -- 'greater' x '>' 'greater' y
-  -- @
-  --
-  -- > +-----+
-  -- > |  x  |
-  -- > +-----+
-  -- > +---+
-  -- > | y |
-  -- > +---+
-  | During
-  -- ^ 'Interval' @x@ is during 'Interval' @y@.
-  --
-  -- @
-  -- 'lesser' x '>' 'lesser' y '&&'
-  -- 'greater' x '<' 'greater' y
-  -- @
-  --
-  -- >   +---+
-  -- >   | x |
-  -- >   +---+
-  -- > +-------+
-  -- > |   y   |
-  -- > +-------+
-  | Finishes
-  -- ^ 'Interval' @x@ finishes 'Interval' @y@.
-  --
-  -- @
-  -- 'isNonEmpty' x '&&'
-  -- 'lesser' x '>' 'lesser' y '&&'
-  -- 'greater' x '==' 'greater' y
-  -- @
-  --
-  -- >   +---+
-  -- >   | x |
-  -- >   +---+
-  -- > +-----+
-  -- > |  y  |
-  -- > +-----+
-  | OverlappedBy
-  -- ^ 'Interval' @x@ is overlapped by 'Interval' @y@.
-  --
-  -- @
-  -- 'lesser' x '>' 'lesser' y '&&'
-  -- 'lesser' x '<' 'greater' y '&&'
-  -- 'greater' x '>' 'greater' y
-  -- @
-  --
-  -- >   +---+
-  -- >   | x |
-  -- >   +---+
-  -- > +---+
-  -- > | y |
-  -- > +---+
-  | MetBy
-  -- ^ 'Interval' @x@ is met by 'Interval' @y@.
-  --
-  -- @
-  -- 'isNonEmpty' y '&&'
-  -- 'lesser' x '==' 'greater' y
-  -- @
-  --
-  -- >     +---+
-  -- >     | x |
-  -- >     +---+
-  -- > +---+
-  -- > | y |
-  -- > +---+
-  | After
-  -- ^ 'Interval' @x@ is after 'Interval' @y@.
-  --
-  -- @
-  -- 'lesser' x '>' 'greater' y
-  -- @
-  --
-  -- >       +---+
-  -- >       | x |
-  -- >       +---+
-  -- > +---+
-  -- > | y |
-  -- > +---+
+  = -- | 'Interval' @x@ is before 'Interval' @y@.
+    --
+    -- @
+    -- 'greater' x '<' 'lesser' y
+    -- @
+    --
+    -- > +---+
+    -- > | x |
+    -- > +---+
+    -- >       +---+
+    -- >       | y |
+    -- >       +---+
+    Before
+  | -- | 'Interval' @x@ meets 'Interval' @y@.
+    --
+    -- @
+    -- 'isNonEmpty' x '&&'
+    -- 'greater' x '==' 'lesser' y
+    -- @
+    --
+    -- > +---+
+    -- > | x |
+    -- > +---+
+    -- >     +---+
+    -- >     | y |
+    -- >     +---+
+    Meets
+  | -- | 'Interval' @x@ overlaps 'Interval' @y@.
+    --
+    -- @
+    -- 'lesser' x '<' 'lesser' y '&&'
+    -- 'greater' x '>' 'lesser' y '&&'
+    -- 'greater' x '<' 'greater' y
+    -- @
+    --
+    -- > +---+
+    -- > | x |
+    -- > +---+
+    -- >   +---+
+    -- >   | y |
+    -- >   +---+
+    Overlaps
+  | -- | 'Interval' @x@ is finished by 'Interval' @y@.
+    --
+    -- @
+    -- 'isNonEmpty' y '&&'
+    -- 'lesser' x '<' 'lesser' y '&&'
+    -- 'greater' x '==' 'greater' y
+    -- @
+    --
+    -- > +-----+
+    -- > |  x  |
+    -- > +-----+
+    -- >   +---+
+    -- >   | y |
+    -- >   +---+
+    FinishedBy
+  | -- | 'Interval' @x@ contains 'Interval' @y@.
+    --
+    -- @
+    -- 'lesser' x '<' 'lesser' y '&&'
+    -- 'greater' x '>' 'greater' y
+    -- @
+    --
+    -- > +-------+
+    -- > |   x   |
+    -- > +-------+
+    -- >   +---+
+    -- >   | y |
+    -- >   +---+
+    Contains
+  | -- | 'Interval' @x@ starts 'Interval' @y@.
+    --
+    -- @
+    -- 'isNonEmpty' x '&&'
+    -- 'lesser' x '==' 'lesser' y '&&'
+    -- 'greater' x '<' 'greater' y
+    -- @
+    --
+    -- > +---+
+    -- > | x |
+    -- > +---+
+    -- > +-----+
+    -- > |  y  |
+    -- > +-----+
+    Starts
+  | -- | 'Interval' @x@ is equal to 'Interval' @y@.
+    --
+    -- @
+    -- 'lesser' x '==' 'lesser' y '&&'
+    -- 'greater' x '==' 'greater' y
+    -- @
+    --
+    -- > +---+
+    -- > | x |
+    -- > +---+
+    -- > +---+
+    -- > | y |
+    -- > +---+
+    Equal
+  | -- | 'Interval' @x@ is started by 'Interval' @y@.
+    --
+    -- @
+    -- 'isNonEmpty' y '&&'
+    -- 'lesser' x '==' 'lesser' y '&&'
+    -- 'greater' x '>' 'greater' y
+    -- @
+    --
+    -- > +-----+
+    -- > |  x  |
+    -- > +-----+
+    -- > +---+
+    -- > | y |
+    -- > +---+
+    StartedBy
+  | -- | 'Interval' @x@ is during 'Interval' @y@.
+    --
+    -- @
+    -- 'lesser' x '>' 'lesser' y '&&'
+    -- 'greater' x '<' 'greater' y
+    -- @
+    --
+    -- >   +---+
+    -- >   | x |
+    -- >   +---+
+    -- > +-------+
+    -- > |   y   |
+    -- > +-------+
+    During
+  | -- | 'Interval' @x@ finishes 'Interval' @y@.
+    --
+    -- @
+    -- 'isNonEmpty' x '&&'
+    -- 'lesser' x '>' 'lesser' y '&&'
+    -- 'greater' x '==' 'greater' y
+    -- @
+    --
+    -- >   +---+
+    -- >   | x |
+    -- >   +---+
+    -- > +-----+
+    -- > |  y  |
+    -- > +-----+
+    Finishes
+  | -- | 'Interval' @x@ is overlapped by 'Interval' @y@.
+    --
+    -- @
+    -- 'lesser' x '>' 'lesser' y '&&'
+    -- 'lesser' x '<' 'greater' y '&&'
+    -- 'greater' x '>' 'greater' y
+    -- @
+    --
+    -- >   +---+
+    -- >   | x |
+    -- >   +---+
+    -- > +---+
+    -- > | y |
+    -- > +---+
+    OverlappedBy
+  | -- | 'Interval' @x@ is met by 'Interval' @y@.
+    --
+    -- @
+    -- 'isNonEmpty' y '&&'
+    -- 'lesser' x '==' 'greater' y
+    -- @
+    --
+    -- >     +---+
+    -- >     | x |
+    -- >     +---+
+    -- > +---+
+    -- > | y |
+    -- > +---+
+    MetBy
+  | -- | 'Interval' @x@ is after 'Interval' @y@.
+    --
+    -- @
+    -- 'lesser' x '>' 'greater' y
+    -- @
+    --
+    -- >       +---+
+    -- >       | x |
+    -- >       +---+
+    -- > +---+
+    -- > | y |
+    -- > +---+
+    After
   deriving (Eq, Show)
 
 -- | Relates two 'Interval's. Calling @relate x y@ tells you how 'Interval' @x@
@@ -333,29 +334,28 @@ data Relation
 -- >>> relate ('toInterval' (3, 7)) ('toInterval' (3, 3)) '==' 'OverlappedBy'
 -- >>> relate ('toInterval' (3, 7)) ('toInterval' (7, 7)) '==' 'Overlaps'
 -- @
-relate :: Ord a => Interval a -> Interval a -> Relation
+relate :: (Ord a) => Interval a -> Interval a -> Relation
 relate x y =
-  let
-    lxly = compare (lesser x) (lesser y)
-    lxgy = compare (lesser x) (greater y)
-    gxly = compare (greater x) (lesser y)
-    gxgy = compare (greater x) (greater y)
-  in case (lxly, lxgy, gxly, gxgy) of
-    (EQ, _, _, EQ) -> Equal
-    (_, _, LT, _) -> Before
-    (LT, _, EQ, LT) -> Meets
-    (_, _, EQ, _) -> Overlaps
-    (GT, EQ, _, GT) -> MetBy
-    (_, EQ, _, _) -> OverlappedBy
-    (_, GT, _, _) -> After
-    (LT, _, _, LT) -> Overlaps
-    (LT, _, _, EQ) -> FinishedBy
-    (LT, _, _, GT) -> Contains
-    (EQ, _, _, LT) -> Starts
-    (EQ, _, _, GT) -> StartedBy
-    (GT, _, _, LT) -> During
-    (GT, _, _, EQ) -> Finishes
-    (GT, _, _, GT) -> OverlappedBy
+  let lxly = compare (lesser x) (lesser y)
+      lxgy = compare (lesser x) (greater y)
+      gxly = compare (greater x) (lesser y)
+      gxgy = compare (greater x) (greater y)
+   in case (lxly, lxgy, gxly, gxgy) of
+        (EQ, _, _, EQ) -> Equal
+        (_, _, LT, _) -> Before
+        (LT, _, EQ, LT) -> Meets
+        (_, _, EQ, _) -> Overlaps
+        (GT, EQ, _, GT) -> MetBy
+        (_, EQ, _, _) -> OverlappedBy
+        (_, GT, _, _) -> After
+        (LT, _, _, LT) -> Overlaps
+        (LT, _, _, EQ) -> FinishedBy
+        (LT, _, _, GT) -> Contains
+        (EQ, _, _, LT) -> Starts
+        (EQ, _, _, GT) -> StartedBy
+        (GT, _, _, LT) -> During
+        (GT, _, _, EQ) -> Finishes
+        (GT, _, _, GT) -> OverlappedBy
 
 -- | Inverts a 'Relation'. Every 'Relation' has an inverse.
 --

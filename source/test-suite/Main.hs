@@ -1,31 +1,27 @@
 module Main
-  ( main
-  ) where
+  ( main,
+  )
+where
 
 import qualified Rampart
 import qualified Test.Hspec as Hspec
 
 main :: IO ()
 main = Hspec.hspec . Hspec.describe "Rampart" $ do
-
   Hspec.describe "toInterval" $ do
-
     Hspec.it "sorts the tuple" $ do
       Rampart.toInterval ('a', 'b')
         `Hspec.shouldBe` Rampart.toInterval ('b', 'a')
 
   Hspec.describe "lesser" $ do
-
     Hspec.it "returns the lesser element" $ do
       Rampart.lesser (Rampart.toInterval ('a', 'b')) `Hspec.shouldBe` 'a'
 
   Hspec.describe "greater" $ do
-
     Hspec.it "returns the greater element" $ do
       Rampart.greater (Rampart.toInterval ('a', 'b')) `Hspec.shouldBe` 'b'
 
   Hspec.describe "isEmpty" $ do
-
     Hspec.it "returns true when the interval is empty" $ do
       Rampart.isEmpty (Rampart.toInterval ('a', 'a')) `Hspec.shouldBe` True
 
@@ -33,7 +29,6 @@ main = Hspec.hspec . Hspec.describe "Rampart" $ do
       Rampart.isEmpty (Rampart.toInterval ('a', 'b')) `Hspec.shouldBe` False
 
   Hspec.describe "isNonEmpty" $ do
-
     Hspec.it "returns false when the interval is empty" $ do
       Rampart.isNonEmpty (Rampart.toInterval ('a', 'a')) `Hspec.shouldBe` False
 
@@ -41,11 +36,9 @@ main = Hspec.hspec . Hspec.describe "Rampart" $ do
       Rampart.isNonEmpty (Rampart.toInterval ('a', 'b')) `Hspec.shouldBe` True
 
   Hspec.describe "relate" $ do
-
-    let
-      relate :: (Int, Int) -> (Int, Int) -> Rampart.Relation
-      relate x y =
-        Rampart.relate (Rampart.toInterval x) (Rampart.toInterval y)
+    let relate :: (Int, Int) -> (Int, Int) -> Rampart.Relation
+        relate x y =
+          Rampart.relate (Rampart.toInterval x) (Rampart.toInterval y)
 
     Hspec.it "identifies the before relation" $ do
       relate (1, 2) (3, 7) `Hspec.shouldBe` Rampart.Before
@@ -87,7 +80,6 @@ main = Hspec.hspec . Hspec.describe "Rampart" $ do
       relate (8, 9) (3, 7) `Hspec.shouldBe` Rampart.After
 
     Hspec.describe "empty left interval" $ do
-
       Hspec.it "before" $ do
         relate (2, 2) (3, 7) `Hspec.shouldBe` Rampart.Before
 
@@ -104,7 +96,6 @@ main = Hspec.hspec . Hspec.describe "Rampart" $ do
         relate (8, 8) (3, 7) `Hspec.shouldBe` Rampart.After
 
     Hspec.describe "empty right interval" $ do
-
       Hspec.it "before" $ do
         relate (3, 7) (2, 2) `Hspec.shouldBe` Rampart.After
 
@@ -121,7 +112,6 @@ main = Hspec.hspec . Hspec.describe "Rampart" $ do
         relate (3, 7) (8, 8) `Hspec.shouldBe` Rampart.Before
 
     Hspec.describe "both empty intervals" $ do
-
       Hspec.it "before" $ do
         relate (4, 4) (5, 5) `Hspec.shouldBe` Rampart.Before
 
@@ -132,7 +122,6 @@ main = Hspec.hspec . Hspec.describe "Rampart" $ do
         relate (6, 6) (5, 5) `Hspec.shouldBe` Rampart.After
 
   Hspec.describe "invert" $ do
-
     Hspec.it "inverts the after relation" $ do
       Rampart.invert Rampart.After `Hspec.shouldBe` Rampart.Before
 
