@@ -60,7 +60,7 @@ test-suite rampart-test-suite
   import: executable
 
   build-depends:
-    , hspec >= 2.7.6 && < 2.11
+    , hspec >= 2.9.7 && < 2.12
   hs-source-dirs: source/test-suite
   main-is: Main.hs
   type: exitcode-stdio-1.0
