@@ -1,15 +1,16 @@
 cabal-version: 2.2
-
 name: rampart
 version: 2.0.0.7
 synopsis: Determine how intervals relate to each other.
 description: Rampart determines how intervals relate to each other.
-
 build-type: Simple
 category: Math
-extra-doc-files: docs/interval-relations.svg
-extra-source-files: CHANGELOG.markdown README.markdown
-license-file: LICENSE.markdown
+extra-doc-files:
+  CHANGELOG.md
+  README.md
+  docs/interval-relations.svg
+
+license-file: LICENSE.txt
 license: MIT
 maintainer: Taylor Fausak
 
@@ -19,12 +20,10 @@ source-repository head
 
 flag pedantic
   default: False
-  description: Enables @-Werror@, which turns warnings into errors.
   manual: True
 
 common library
-  build-depends:
-    , base >= 4.16.0 && < 4.20
+  build-depends: base ^>=4.18.0.0 || ^>=4.19.0.0 || ^>=4.20.0.0
   default-language: Haskell2010
   ghc-options:
     -Weverything
@@ -46,7 +45,6 @@ common library
 
 common executable
   import: library
-
   build-depends: rampart
   ghc-options:
     -rtsopts
@@ -55,15 +53,15 @@ common executable
 
 library
   import: library
-
+  -- cabal-gild: discover source/library
   exposed-modules: Rampart
   hs-source-dirs: source/library
 
 test-suite rampart-test-suite
   import: executable
-
   build-depends:
-    , hspec >= 2.9.7 && < 2.12
+    hspec ^>=2.11.8
+
   hs-source-dirs: source/test-suite
   main-is: Main.hs
   type: exitcode-stdio-1.0
