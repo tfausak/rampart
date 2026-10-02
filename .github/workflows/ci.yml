@@ -33,7 +33,7 @@ jobs:
         with:
           name: rampart-${{ github.sha }}-${{ matrix.os }}-${{ matrix.ghc }}
           path: artifact.tar
-      - run: cabal run -- rampart-test-suite --randomize --strict
+      - run: cabal run rampart-test-suite -- --randomize --strict
     strategy:
       matrix:
         include:
